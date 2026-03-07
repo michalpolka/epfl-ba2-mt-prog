@@ -14,8 +14,33 @@ public:
   /*****************************************************
     Compléter le code à partir d'ici
   *******************************************************/
+  Flacon(const string& n, const double v, const double pH)
+    : nom(n), volume(v), pH(pH) {}
+
+  ostream& etiquette(ostream& sortie) const {
+    sortie << nom << " : " << volume << " ml, " << "pH " << pH;
+    return sortie;
+  }
+
+  Flacon operator+(const Flacon& flacon) const {
+    return Flacon(
+      nom + " + " + flacon.nom,
+      volume + flacon.volume,
+      (-log10( ( volume*(pow(10,-pH))+flacon.volume*pow(10,-flacon.pH) ) / (volume+flacon.volume) ) )
+      );
+  }
+
+  void operator+=(const Flacon& flacon) {
+    *this = *this + flacon;
+  }
 
 };
+
+ostream& operator<<(ostream& sortie, Flacon const& flacon) {
+  return flacon.etiquette(sortie);
+}
+
+#define BONUS
 
 /*******************************************
  * Ne rien modifier après cette ligne.
