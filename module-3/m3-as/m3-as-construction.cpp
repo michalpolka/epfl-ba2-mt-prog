@@ -103,12 +103,17 @@ private:
 
 };
 
-ostream& operator<<(ostream& sortie, const Construction & construction) {
+ostream& operator<<(ostream& sortie, const Brique& brique) {
+  brique.afficher(sortie);
+  return sortie;
+}
+
+ostream& operator<<(ostream& sortie, const Construction& construction) {
   construction.afficher(sortie);
   return sortie;
 }
 
-const Construction operator*(const unsigned int n, const Construction & a)
+const Construction operator*(const unsigned int n, const Construction& a)
 {
   Construction out = a;
   for (int i(1); i<n; ++i) {
@@ -117,7 +122,7 @@ const Construction operator*(const unsigned int n, const Construction & a)
   return out;
 }
 
-const Construction operator/(const unsigned int n, const Construction & a)
+const Construction operator/(const unsigned int n, const Construction& a)
 {
   Construction out = a;
   for (int i(1); i<n; ++i) {
@@ -126,7 +131,7 @@ const Construction operator/(const unsigned int n, const Construction & a)
   return out;
 }
 
-const Construction operator%(const unsigned int n, const Construction & a)
+const Construction operator%(const unsigned int n, const Construction& a)
 {
   Construction out = a;
   for (int i(1); i<n; ++i) {
