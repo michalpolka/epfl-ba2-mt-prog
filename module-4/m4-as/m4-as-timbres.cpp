@@ -15,19 +15,20 @@ protected:
     unsigned annee;
     string pays;
     double valeur_faciale;
-    unsigned int age() const {return ANNEE_COURANTE-annee;}
 
 public:
-    Timbre(const string &n, const unsigned a, const string &p, const double vf)
+  Timbre(const string &n, const unsigned a, const string &p="Suisse", const double vf=1.0)
         : nom(n), annee(a), pays(p), valeur_faciale(vf) {}
 
-    virtual ostream& afficher(ostream& sortie) const {
+  unsigned int age() const {return ANNEE_COURANTE-annee;}
+
+  virtual ostream& afficher(ostream& sortie) const {
         sortie << "Timbre de nom " << nom << " datant de " << annee << " (provenance "
-               << pays << " ayant pour valeur faciale " << valeur_faciale << " francs";
+               << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs";
         return sortie;
     }
 
-    double vente() const {
+  virtual double vente() const {
         if (age()<5) return valeur_faciale;
         return static_cast<double>(age())*2.5*valeur_faciale;
     }
@@ -44,22 +45,24 @@ public:
     Rare(
         const string &n,
         const unsigned a,
-        const string &p,
-        const double vf,
-        const unsigned int e)
+        const string &p = "Suisse",
+        const double vf = 1.0,
+        const unsigned int e = 100)
         : Timbre(n,a,p,vf), exemplaires(e) {}
 
+    unsigned int nb_exemplaires() const {return exemplaires;}
+
     ostream& afficher(ostream& sortie) const {
-        sortie << "Timbre rare (" << exemplaires << " ex.) de nom " << nom
+        sortie << "Timbre rare (" << nb_exemplaires() << " ex.) de nom " << nom
                << " datant de " << annee << " (provenance "
-               << pays << " ayant pour valeur faciale " << valeur_faciale << " francs";
+               << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs";
         return sortie;
     }
 
     double vente() const {
         double prix(PRIX_BASE_PEU_RARE);
-        if (exemplaires<100) prix = PRIX_BASE_TRES_RARE;
         if (exemplaires<1000) prix = PRIX_BASE_RARE;
+        if (exemplaires<100) prix = PRIX_BASE_TRES_RARE;
         return prix * (static_cast<double>(age())/ 10.0);
     }
 
@@ -68,18 +71,18 @@ public:
 
 class Commemoratif: public Timbre {
 public:
-    Commemoratif(const string &n, const unsigned a, const string &p, const double vf)
+    Commemoratif(const string &n, const unsigned a, const string &p = "Suisse", const double vf = 1.0)
         : Timbre(n,a,p,vf) {}
 
     ostream& afficher(ostream& sortie) const {
         sortie << "Timbre commémoratif de nom " << nom
                << " datant de " << annee << " (provenance "
-               << pays << " ayant pour valeur faciale " << valeur_faciale << " francs";
+               << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs";
         return sortie;
     }
 
     double vente() const {
-        return valeur_faciale*2;
+        return Timbre::vente()*2;
     }
 };
 
